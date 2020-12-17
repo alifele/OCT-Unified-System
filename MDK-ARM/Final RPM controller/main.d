@@ -24,4 +24,16 @@ final rpm controller\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_d
 final rpm controller\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h
 final rpm controller\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h
 final rpm controller\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
+final rpm controller\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 final rpm controller\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
+final rpm controller\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
+final rpm controller\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
+final rpm controller\main.o: ../GUI/GUI.h
+final rpm controller\main.o: ../ssd1306/inc/ssd1306.h
+final rpm controller\main.o: ../ssd1306/inc/fonts.h
+final rpm controller\main.o: ../ssd1306/inc/fonts.h
+final rpm controller\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+final rpm controller\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+final rpm controller\main.o: ../keypad/keypad.h
+final rpm controller\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+final rpm controller\main.o: ../PID_controller/PID.h
