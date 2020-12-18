@@ -23,6 +23,7 @@
 "final rpm controller\keypad.o"
 "final rpm controller\gui.o"
 "final rpm controller\pid.o"
+"final rpm controller\stepper.o"
 --library_type=microlib --strict --scatter "Final RPM controller\Final RPM controller.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

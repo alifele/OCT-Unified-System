@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stepper.h"
 #include "GUI.h"
 #include "keypad.h"
 #include <string.h>
@@ -80,6 +80,7 @@ static void MX_I2C1_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 static void keypad_Init(void);
+void stepper_Init(void);
 //void set_rpm(uint16_t input_number);
 
 /* USER CODE END PFP */
@@ -133,6 +134,7 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_TIM2_Init();
+  HAL_TIM_OC_Start(&htim2, TIM_CHANNEL_3);
   /* USER CODE BEGIN 2 */
   
   ssd1306_Init();
@@ -156,6 +158,8 @@ int main(void)
   GUI_newScreen();
   window new_window = myapp.menu;
   new_window.status = 1;
+  
+  __HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, 1);
 
   while (1)
   {
@@ -271,9 +275,9 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 0;
+  htim2.Init.Prescaler = 31999;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 65535;
+  htim2.Init.Period = 250;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_OC_Init(&htim2) != HAL_OK)
@@ -286,8 +290,8 @@ static void MX_TIM2_Init(void)
   {
     Error_Handler();
   }
-  sConfigOC.OCMode = TIM_OCMODE_TIMING;
-  sConfigOC.Pulse = 0;
+  sConfigOC.OCMode = TIM_OCMODE_TOGGLE;
+  sConfigOC.Pulse = 125;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_OC_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
@@ -388,6 +392,33 @@ static void keypad_Init(void){
 	
 	keypad_init(&keypad_struct);
 
+}
+
+
+
+void stepper_Init(void){
+	
+	stepper_typedef stepper_struct;
+	
+	stepper_struct.PFD = GPIOA;
+	stepper_struct.RST = GPIOA;
+	stepper_struct.ENB = GPIOA;
+	stepper_struct.MS1 = GPIOB;
+	stepper_struct.DIR = GPIOB;
+	stepper_struct.SLP = GPIOA;
+	stepper_struct.MS2 = GPIOB;
+	
+	// don't uncomment. just for note: stepper_struct.STEP = TIM2_CH3 = PB10
+	
+	stepper_struct.PFD_pin = 4;
+	stepper_struct.RST_pin = 5;
+	stepper_struct.ENB_pin = 6;
+	stepper_struct.MS1_pin = 0;
+	stepper_struct.DIR_pin = 2;
+	stepper_struct.SLP_pin = 7;
+	stepper_struct.MS2_pin = 1;
+	
+		
 }
 /* USER CODE END 4 */
 

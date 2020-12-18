@@ -28,6 +28,7 @@ final rpm controller\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i
 final rpm controller\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 final rpm controller\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
 final rpm controller\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
+final rpm controller\main.o: ../StepperDriver/stepper.h
 final rpm controller\main.o: ../GUI/GUI.h
 final rpm controller\main.o: ../ssd1306/inc/ssd1306.h
 final rpm controller\main.o: ../ssd1306/inc/fonts.h
