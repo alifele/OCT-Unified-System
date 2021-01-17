@@ -14,11 +14,13 @@ uint8_t curser[2] = {0,0};
 uint8_t set_speed_counter=0;
 extern int32_t Frequency;
 uint16_t input_number = 0;
-uint16_t goal_rpm = 399;
+uint16_t goal_rpm = 100;
 uint16_t GUI_curr_dutycycle;
 char input_string[5];
 uint8_t rpm_ctr_priod = 50;
 uint8_t rpm_ctr_counter = 0;
+extern TIM_HandleTypeDef htim2;
+
 
 //void set_dutycycle(uint16_t input_number);
 
@@ -192,6 +194,11 @@ void GUI_ShowWin(window * win){
 
 window GUI_DotheAction(window * win, char* pressed_char,application_windows *app){
 	
+	
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+	HAL_Delay(30);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
+	
 	switch(win->windowID){
 		
 		case 0: //main window
@@ -294,6 +301,9 @@ window GUI_menu_action(window *win, char * pressed_char,application_windows *app
 	curser[0] = 0;
 	curser[1] = 0;
 	if (strcmp(pressed_char, "Z")){
+		
+		
+
 		switch (pressed_char[0]){
 			case '4':
 				return GUI_GoTo(win, app->about);
@@ -478,7 +488,7 @@ void GUI_show_speed_show(window *win){
 	curser[1] = 0;
 	char content[10];
 	ssd1306_Fill(White);
-	sprintf(content,"%d",120000/Frequency);
+	sprintf(content,"%d",goal_rpm);
 	
 	curser[1] = 3;
 	curser[0] = 1; //curser pos
@@ -679,18 +689,24 @@ void GUI_settingSpeed_show(window *win){
 
 	ssd1306_SetCursor(9,23);
 	ssd1306_WriteString("Setting.",Font_11x18,White);
-	HAL_Delay(150);
+	HAL_Delay(100);
 	ssd1306_UpdateScreen();
 	
 	ssd1306_SetCursor(9,23);
 	ssd1306_WriteString("Setting..",Font_11x18,White);
-	HAL_Delay(200);
+	HAL_Delay(150);
 	ssd1306_UpdateScreen();
 	
 	ssd1306_SetCursor(9,23);
 	ssd1306_WriteString("Setting...",Font_11x18,White);
-	HAL_Delay(250);
+	HAL_Delay(200);
 	ssd1306_UpdateScreen();
+	
+	
+	  for(int i=1; i<goal_rpm; i++){
+			__HAL_TIM_SET_PRESCALER(&htim2, (int) 60000/(goal_rpm) - 1);
+		  HAL_Delay(10);
+	  }
 	
 	ssd1306_Fill(Black);
 	ssd1306_SetCursor(9,18);
@@ -743,7 +759,7 @@ void GUI_invalid_show(window *win){
 	ssd1306_SetCursor(17,8);
 	ssd1306_WriteString("Invalid!",Font_11x18,White);
 	ssd1306_SetCursor(2,35);
-	ssd1306_WriteString("12<speed<400",Font_7x10,White);
+	ssd1306_WriteString("0<speed<200",Font_7x10,White);
 	
 	ssd1306_SetCursor(2,46);
 	ssd1306_WriteString("press any key...",Font_7x10,White);

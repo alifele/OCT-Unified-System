@@ -134,19 +134,19 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_TIM2_Init();
-  HAL_TIM_OC_Start(&htim2, TIM_CHANNEL_3);
   /* USER CODE BEGIN 2 */
   
   ssd1306_Init();
   keypad_Init();
-
+  stepper_Init();
+  HAL_TIM_OC_Start(&htim2, TIM_CHANNEL_3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
-   
+   /*
   HAL_Delay(500);
   ssd1306_Fill(White);
   ssd1306_UpdateScreen();
@@ -154,13 +154,15 @@ int main(void)
   ssd1306_SetCursor(23,23);
   ssd1306_WriteString("4ilo",Font_11x18,Black);
   ssd1306_UpdateScreen();
-   
+   */
   GUI_newScreen();
   window new_window = myapp.menu;
   new_window.status = 1;
   
-  __HAL_TIM_SetCompare(&htim2, TIM_CHANNEL_3, 1);
-
+  //__HAL_TIM_SET_AUTORELOAD(&htim2, (int) 60000/(100) - 1);
+  
+  
+  //__HAL_TIM_SET_PRESCALER(&htim2, (int) 60000/(100) - 1);
   while (1)
   {
 	  
@@ -275,9 +277,9 @@ static void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 31999;
+  htim2.Init.Prescaler = 999;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 250;
+  htim2.Init.Period = 20;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_OC_Init(&htim2) != HAL_OK)
@@ -291,7 +293,7 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_TOGGLE;
-  sConfigOC.Pulse = 125;
+  sConfigOC.Pulse = 10;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_OC_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
@@ -323,8 +325,8 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7
-                          |GPIO_PIN_8, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
+                          |GPIO_PIN_7|GPIO_PIN_8, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_12
@@ -337,10 +339,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PA4 PA5 PA6 PA7
-                           PA8 */
-  GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7
-                          |GPIO_PIN_8;
+  /*Configure GPIO pins : PA2 PA4 PA5 PA6
+                           PA7 PA8 */
+  GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
+                          |GPIO_PIN_7|GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -410,14 +412,14 @@ void stepper_Init(void){
 	
 	// don't uncomment. just for note: stepper_struct.STEP = TIM2_CH3 = PB10
 	
-	stepper_struct.PFD_pin = 4;
-	stepper_struct.RST_pin = 5;
-	stepper_struct.ENB_pin = 6;
-	stepper_struct.MS1_pin = 0;
-	stepper_struct.DIR_pin = 2;
-	stepper_struct.SLP_pin = 7;
-	stepper_struct.MS2_pin = 1;
-	
+	stepper_struct.PFD_pin = GPIO_PIN_4;
+	stepper_struct.RST_pin = GPIO_PIN_5;
+	stepper_struct.ENB_pin = GPIO_PIN_6;
+	stepper_struct.MS1_pin = GPIO_PIN_0;
+	stepper_struct.DIR_pin = GPIO_PIN_2;
+	stepper_struct.SLP_pin = GPIO_PIN_7;
+	stepper_struct.MS2_pin = GPIO_PIN_1;
+	stepper_init(&stepper_struct);
 		
 }
 /* USER CODE END 4 */
